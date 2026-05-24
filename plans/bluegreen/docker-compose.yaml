@@ -4,8 +4,8 @@ services:
     ports:
       - "8080-8082:8080"
     pull_policy: never
-    labels:
-      traefik.enable: "true"
+    # labels:
+    #   traefik.enable: "true"
   
   traefik:
     image: traefik:v3.7.1
