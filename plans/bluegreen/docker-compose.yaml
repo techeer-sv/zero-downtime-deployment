@@ -3,6 +3,7 @@ services:
     image: zero-downtime-app:v1.0.0
     ports:
       - "8080-8082:8080"
+    pull_policy: never
     labels:
       traefik.enable: "true"
   
