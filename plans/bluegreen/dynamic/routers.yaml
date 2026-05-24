@@ -13,3 +13,7 @@ http:
           - url: http://app:8080
           - url: http://app:8081
           - url: http://app:8082
+        healthcheck:
+          path: "/health"
+          interval: "10s"
+          timeout: "3s"
