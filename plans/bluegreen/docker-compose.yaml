@@ -20,6 +20,7 @@ services:
       - "--accesslog.fields.defaultmode=keep"
       - "--accesslog.fields.headers.defaultmode=keep"
       - "--accesslog.fields.headers.names.X-Forwarded-For=keep"
+      - "--api.insecure=true"
       - "--api.dashboard=true"
       - "--metrics.prometheus=true"
       - "--metrics.prometheus.buckets=0.100000, 0.300000, 1.200000, 5.000000"
