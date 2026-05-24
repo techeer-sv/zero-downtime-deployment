@@ -30,8 +30,8 @@ services:
       - "--tracing=true"
       - "--tracing.otlp=true"
       - "--tracing.otlp.grpc.insecure=true"
-      - "--tracing.otlp.grpc.endpoint=otel-collector:4317"
-      - "--tracing.serviceName=traefik"
+      - "--tracing.otlp.grpc.endpoint=${MY_OTEL_HOST}:4317"
+      - "--tracing.serviceName=traefik_bg"
       - "--tracing.sampleRate=1.0"
       - "--providers.file.directory=/etc/traefik/dynamic"
       - "--providers.file.watch=true"
@@ -39,6 +39,8 @@ services:
       - "80:80"
       - "8090:8080"
       - "8091:8091"
+    environment:
+      MY_OTEL_HOST: ${MY_OTEL_HOST:-otel-collector}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./dynamic:/etc/traefik/dynamic:ro
