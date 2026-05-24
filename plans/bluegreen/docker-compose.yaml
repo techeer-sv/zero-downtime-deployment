@@ -4,13 +4,17 @@ services:
     ports:
       - "8080-8082:8080"
     pull_policy: never
-    # labels:
-    #   traefik.enable: "true"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.app.rule: PathPrefix(`/`)
+      traefik.http.routers.app.entrypoints: web
+      traefik.http.services.app.loadbalancer.server.port: "8080"
   
   traefik:
     image: traefik:v3.7.1
     container_name: traefik_bg
     command:
+      - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       - "--log.level=DEBUG"
@@ -34,8 +38,8 @@ services:
       - "--tracing.otlp.grpc.endpoint=${MY_OTEL_HOST}:4317"
       - "--tracing.serviceName=traefik_bg"
       - "--tracing.sampleRate=1.0"
-      - "--providers.file.directory=/etc/traefik/dynamic"
-      - "--providers.file.watch=true"
+      # - "--providers.file.directory=/etc/traefik/dynamic"
+      # - "--providers.file.watch=true"
     ports:
       - "80:80"
       - "8090:8080"
