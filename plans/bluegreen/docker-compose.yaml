@@ -1,15 +1,23 @@
 services:
-  app:
+  app-blue:
     image: zero-downtime-app:v1.0.0
     ports:
       - "8080-8082:8080"
     pull_policy: never
     labels:
       traefik.enable: "true"
-      traefik.http.routers.app.rule: PathPrefix(`/`)
-      traefik.http.routers.app.entrypoints: web
-      traefik.http.services.app.loadbalancer.server.port: "8080"
-  
+      traefik.http.services.app-blue.loadbalancer.server.port: "8080"
+
+
+  # app-green:
+  #   image: zero-downtime-app:v1.0.0
+  #   ports:
+  #     - "8083-8085:8080"
+  #   pull_policy: never
+  #   labels:
+  #     traefik.enable: "true"
+  #     traefik.http.services.app-green.loadbalancer.server.port: "8080"
+
   traefik:
     image: traefik:v3.7.1
     container_name: traefik_bg

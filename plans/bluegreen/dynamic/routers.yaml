@@ -1,18 +1,19 @@
 http:
   routers:
-    appserver:
+    app-bg:
       rule: PathPrefix(`/`)
       entryPoints:
         - web
-      service: appserver
+      service: app-bg
 
   services:
-    appserver:
-      loadBalancer:
-        servers:
-          - url: http://app:8080
-          - url: http://app:8081
-          - url: http://app:8082
+    app-bg:
+      weighted:
+        services:
+          - name: app-blue@docker
+            weight: 100
+          - name: app-green@docker
+            weight: 0
         healthcheck:
           path: "/health"
           interval: "10s"
