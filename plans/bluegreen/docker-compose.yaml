@@ -46,8 +46,8 @@ services:
       - "--tracing.otlp.grpc.endpoint=${MY_OTEL_HOST}:4317"
       - "--tracing.serviceName=traefik_bg"
       - "--tracing.sampleRate=1.0"
-      # - "--providers.file.directory=/etc/traefik/dynamic"
-      # - "--providers.file.watch=true"
+      - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--providers.file.watch=true"
     ports:
       - "80:80"
       - "8090:8080"
