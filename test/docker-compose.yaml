@@ -1,0 +1,14 @@
+services:
+  k6:
+    image: grafana/k6:0.53.0
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      TARGET_URL: ${TARGET_URL:-http://host.docker.internal}
+      K6_VUS: ${K6_VUS:-20}
+      K6_DURATION: ${K6_DURATION:-2m}
+      K6_RPS: ${K6_RPS:-0}
+      EXPECTED_VERSION: ${EXPECTED_VERSION:-}
+    volumes:
+      - ./:/scripts:ro
+    working_dir: /scripts
