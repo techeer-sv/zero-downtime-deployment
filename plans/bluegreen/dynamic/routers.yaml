@@ -14,7 +14,4 @@ http:
             weight: 100
           - name: app-green@docker
             weight: 0
-        healthcheck:
-          path: "/health"
-          interval: "10s"
-          timeout: "3s"
+        healthCheck: {}

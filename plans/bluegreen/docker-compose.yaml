@@ -7,6 +7,9 @@ services:
     labels:
       traefik.enable: "true"
       traefik.http.services.app-blue.loadbalancer.server.port: "8080"
+      traefik.http.services.app-blue.loadbalancer.healthcheck.path: "/health"
+      traefik.http.services.app-blue.loadbalancer.healthcheck.interval: "10s"
+      traefik.http.services.app-blue.loadbalancer.healthcheck.timeout: "3s"
 
 
   # app-green:
@@ -17,6 +20,9 @@ services:
   #   labels:
   #     traefik.enable: "true"
   #     traefik.http.services.app-green.loadbalancer.server.port: "8080"
+  #     traefik.http.services.app-green.loadbalancer.healthcheck.path: "/health"
+  #     traefik.http.services.app-green.loadbalancer.healthcheck.interval: "10s"
+  #     traefik.http.services.app-green.loadbalancer.healthcheck.timeout: "3s"
 
   traefik:
     image: traefik:v3.7.1
