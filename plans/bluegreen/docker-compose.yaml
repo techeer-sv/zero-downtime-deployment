@@ -13,7 +13,7 @@ services:
 
 
   app-green:
-    image: zero-downtime-app:v1.0.0
+    image: zero-downtime-app:v1.0.1
     ports:
       - "8083-8085:8080"
     pull_policy: never
