@@ -1,0 +1,15 @@
+http:
+  routers:
+    app-bg:
+      rule: PathPrefix(`/`)
+      entryPoints:
+        - web
+      service: app-bg
+
+  services:
+    app-bg:
+      weighted:
+        services:
+          - name: app-green@docker
+            weight: 100
+        healthCheck: {}
