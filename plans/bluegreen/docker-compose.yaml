@@ -38,6 +38,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./dynamic:/etc/traefik/dynamic:ro
+    networks:
+      - bluegreen-network
     cpus: "0.5"
     mem_limit: "500m"
     labels:
