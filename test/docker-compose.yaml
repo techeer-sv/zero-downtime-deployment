@@ -10,7 +10,7 @@ services:
       EXPECTED_VERSION: ${EXPECTED_VERSION:-}
       K6_WEB_DASHBOARD: "true"
       K6_WEB_DASHBOARD_PORT: "5665"
-    command: run /scripts/blueegreen.js
+    command: run /scripts/bluegreen.js
     ports:
       - "5665:5665"
     volumes:
