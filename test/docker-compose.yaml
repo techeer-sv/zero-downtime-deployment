@@ -8,6 +8,11 @@ services:
       K6_DURATION: ${K6_DURATION:-5m}
       K6_RPS: ${K6_RPS:-20}
       EXPECTED_VERSION: ${EXPECTED_VERSION:-}
+      K6_WEB_DASHBOARD: "true"
+      K6_WEB_DASHBOARD_PORT: "5665"
+    command: run /scripts/blueegreen.js
+    ports:
+      - "5665:5665"
     volumes:
       - ./:/scripts:ro
     working_dir: /scripts
