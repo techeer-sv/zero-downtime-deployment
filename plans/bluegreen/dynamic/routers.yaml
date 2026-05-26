@@ -11,7 +11,5 @@ http:
       weighted:
         services:
           - name: app-blue@docker
-            weight: 0
-          - name: app-green@docker
             weight: 100
         healthCheck: {}
