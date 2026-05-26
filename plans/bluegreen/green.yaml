@@ -1,0 +1,18 @@
+services:
+  app-green:
+    image: zero-downtime-app:v1.0.1
+    networks:
+      - bluegreen-network
+    ports:
+      - "8083-8085:8080"
+    pull_policy: never
+    labels:
+      traefik.enable: "true"
+      traefik.http.services.app-green.loadbalancer.server.port: "8080"
+      traefik.http.services.app-green.loadbalancer.healthcheck.path: "/health"
+      traefik.http.services.app-green.loadbalancer.healthcheck.interval: "10s"
+      traefik.http.services.app-green.loadbalancer.healthcheck.timeout: "3s"
+
+networks:
+  bluegreen-network:
+    external: true
