@@ -14,5 +14,5 @@ services:
     ports:
       - "5665:5665"
     volumes:
-      - ./:/scripts:ro
+      - ./scripts:/scripts:ro
     working_dir: /scripts
