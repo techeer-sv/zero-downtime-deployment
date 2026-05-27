@@ -13,7 +13,7 @@ func main() {
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf("Received request: %s %s\n", r.Method, r.URL.Path)
+		fmt.Printf("{\"version\": \"%s\"}\n", appVersion)
 		fmt.Fprintf(w, "version - %s", appVersion)
 	})
 

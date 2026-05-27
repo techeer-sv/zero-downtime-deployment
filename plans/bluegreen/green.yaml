@@ -7,6 +7,7 @@ services:
       - "8083-8085:8080"
     pull_policy: never
     labels:
+      logging: enabled
       traefik.enable: "true"
       traefik.http.services.app-green.loadbalancer.server.port: "8080"
       traefik.http.services.app-green.loadbalancer.healthcheck.path: "/health"
