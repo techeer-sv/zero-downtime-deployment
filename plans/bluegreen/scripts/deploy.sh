@@ -42,7 +42,7 @@ TEMPLATES_DIR="$BASE_DIR/templates"
 BG_ROUTERS="$BASE_DIR/dynamic/bg-routers.yaml"
 
 # Bake 대기 시간 (각 단계별 최소 안정화 대기 초)
-BAKE_TIME=10
+BAKE_TIME=20
 # 헬스체크 최대 대기 시간 (초)
 HEALTH_TIMEOUT=90
 # 배포 목표 컨테이너 수 (replica 3개)
