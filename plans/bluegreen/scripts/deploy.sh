@@ -131,6 +131,7 @@ log "🔎 현재 실행 중인 환경 확인 중..."
 
 # 실행 중인(running 상태) 컨테이너 수 확인
 BLUE_COUNT=$(cd "$BASE_DIR" && docker compose -f blue.yaml ps --status running 2>/dev/null | grep app-blue | wc -l | tr -d ' ')
+log "   블루 실행 중인 컨테이너: ${BLUE_COUNT}개"
 GREEN_COUNT=$(cd "$BASE_DIR" && docker compose -f green.yaml ps --status running 2>/dev/null | grep app-green | wc -l | tr -d ' ')
 
 log "   블루 실행 중인 컨테이너: ${BLUE_COUNT}개"
