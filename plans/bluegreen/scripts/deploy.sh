@@ -129,10 +129,12 @@ log "================================================================"
 log ""
 log "🔎 현재 실행 중인 환경 확인 중..."
 
-# 실행 중인(running 상태) 컨테이너 수 확인
-BLUE_COUNT=$(cd "$BASE_DIR" && docker compose -f blue.yaml ps --status running 2>/dev/null | grep app-blue | wc -l | tr -d ' ')
-log "   블루 실행 중인 컨테이너: ${BLUE_COUNT}개"
-GREEN_COUNT=$(cd "$BASE_DIR" && docker compose -f green.yaml ps --status running 2>/dev/null | grep app-green | wc -l | tr -d ' ')
+# 실행 중인 컨테이너 수 확인
+# docker ps로 직접 조회해 compose -f 의존성을 없앤다
+# grep은 매치 없을 때 exit 1을 반환하므로 (grep ... || true) 서브셸로 감싸고
+# wc -l로 라인 수를 세면 항상 exit 0이 보장된다
+BLUE_COUNT=$(docker ps --format "{{.Names}}" 2>/dev/null | (grep "app-blue" || true) | wc -l | tr -d ' ')
+GREEN_COUNT=$(docker ps --format "{{.Names}}" 2>/dev/null | (grep "app-green" || true) | wc -l | tr -d ' ')
 
 log "   블루 실행 중인 컨테이너: ${BLUE_COUNT}개"
 log "   그린 실행 중인 컨테이너: ${GREEN_COUNT}개"
