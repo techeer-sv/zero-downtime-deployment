@@ -1,10 +1,15 @@
 services:
   app-green:
-    image: zero-downtime-app:v1.0.1
+    image: zero-downtime-app:${IMAGE_TAG}
     networks:
       - bluegreen-network
     ports:
       - "8083-8085:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
     pull_policy: never
     labels:
       logging: enabled
