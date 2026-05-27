@@ -10,7 +10,8 @@ services:
       EXPECTED_VERSION: ${EXPECTED_VERSION:-}
       K6_WEB_DASHBOARD: "true"
       K6_WEB_DASHBOARD_PORT: "5665"
-    command: sh -c "k6 run /scripts/bluegreen.js; tail -f /dev/null"
+    entrypoint: ["sh", "-c"]
+    command: "k6 run /scripts/bluegreen.js; tail -f /dev/null"
     ports:
       - "5665:5665"
     volumes:
