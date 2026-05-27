@@ -76,18 +76,19 @@ bake() {
 # ============================================================
 health_check() {
     local ENV_NAME="$1"           # "blue" 또는 "green"
-    local COMPOSE_FILE="$BASE_DIR/${ENV_NAME}.yaml"
     local ELAPSED=0
 
     log "🔍 [$ENV_NAME] 헬스체크 시작 (최대 ${HEALTH_TIMEOUT}초 대기, 목표: ${REPLICA_COUNT}개 healthy)..."
 
     while [ "$ELAPSED" -lt "$HEALTH_TIMEOUT" ]; do
-        # docker compose ps 출력에서 "(healthy)" 상태 컨테이너 수 집계
-        HEALTHY_COUNT=$(
-            cd "$BASE_DIR" && \
-            docker compose -f "${ENV_NAME}.yaml" ps 2>/dev/null \
-            | grep -c "(healthy)" || true
-        )
+        # docker ps에서 app-{ENV_NAME} 컨테이너 중 (healthy) 상태 수 집계
+        # 두 grep 모두 매치 없을 때 exit 1이 가능하므로 (grep ... || true) 로 감싸고
+        # wc -l로 라인 수를 세면 항상 exit 0이 보장된다
+        HEALTHY_COUNT=$(docker ps --format "{{.Names}} {{.Status}}" 2>/dev/null \
+            | (grep "app-${ENV_NAME}" || true) \
+            | (grep "(healthy)" || true) \
+            | wc -l \
+            | tr -d ' ')
 
         if [ "$HEALTHY_COUNT" -ge "$REPLICA_COUNT" ]; then
             log "✅ [$ENV_NAME] 헬스체크 통과! (healthy 컨테이너: ${HEALTHY_COUNT}/${REPLICA_COUNT}개)"
@@ -102,7 +103,7 @@ health_check() {
     # 타임아웃 — 컨테이너 상태 출력 후 종료
     log "❌ [$ENV_NAME] 헬스체크 실패: ${HEALTH_TIMEOUT}초 안에 모든 컨테이너가 healthy 상태가 되지 않았습니다."
     log "   현재 컨테이너 상태:"
-    cd "$BASE_DIR" && docker compose -f "${ENV_NAME}.yaml" ps || true
+    docker ps --filter "name=app-${ENV_NAME}" 2>/dev/null || true
     exit 1
 }
 
