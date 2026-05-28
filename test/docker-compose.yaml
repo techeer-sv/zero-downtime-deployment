@@ -5,7 +5,7 @@ services:
       TARGET_URL: ${TARGET_URL:-http://100.116.150.4}
       K6_VUS: ${K6_VUS:-10}
       K6_MAX_VUS: ${K6_MAX_VUS:-20}
-      K6_DURATION: ${K6_DURATION:-5m}
+      K6_DURATION: ${K6_DURATION:-10m}
       K6_RPS: ${K6_RPS:-20}
       EXPECTED_VERSION: ${EXPECTED_VERSION:-}
       K6_WEB_DASHBOARD: "true"
