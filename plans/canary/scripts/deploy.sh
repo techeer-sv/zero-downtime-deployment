@@ -76,11 +76,11 @@ health_check() {
     log "🔍 [app-${ENV_NAME}] 헬스체크 시작 (최대 ${HEALTH_TIMEOUT}초, 목표: ${EXPECTED}개 healthy)..."
 
     while [ "$ELAPSED" -lt "$HEALTH_TIMEOUT" ]; do
-        HEALTHY_COUNT=$(
-            cd "$BASE_DIR" && \
-            docker compose -f "${ENV_NAME}.yaml" ps 2>/dev/null \
-            | grep -c "(healthy)" || true
-        )
+        HEALTHY_COUNT=$(docker ps --format "{{.Names}} {{.Status}}" 2>/dev/null \
+            | (grep "app-${ENV_NAME}" || true) \
+            | (grep "(healthy)" || true) \
+            | wc -l \
+            | tr -d ' ')
 
         if [ "$HEALTHY_COUNT" -ge "$EXPECTED" ]; then
             log "✅ [app-${ENV_NAME}] 헬스체크 통과! (${HEALTHY_COUNT}/${EXPECTED}개 healthy)"
