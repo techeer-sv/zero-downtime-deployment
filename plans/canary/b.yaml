@@ -1,0 +1,24 @@
+services:
+  app-b:
+    image: zero-downtime-app:${IMAGE_TAG}
+    networks:
+      - canary-network
+    ports:
+      - "8083-8085:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    pull_policy: never
+    labels:
+      logging: enabled
+      traefik.enable: "true"
+      traefik.http.services.app-b.loadbalancer.server.port: "8080"
+      traefik.http.services.app-b.loadbalancer.healthcheck.path: "/health"
+      traefik.http.services.app-b.loadbalancer.healthcheck.interval: "10s"
+      traefik.http.services.app-b.loadbalancer.healthcheck.timeout: "3s"
+
+networks:
+  canary-network:
+    external: true
