@@ -93,7 +93,7 @@ health_check() {
     done
 
     log "❌ [app-${ENV_NAME}] 헬스체크 실패: ${HEALTH_TIMEOUT}초 안에 ${EXPECTED}개 컨테이너가 healthy 상태가 되지 않았습니다."
-    cd "$BASE_DIR" && docker compose -f "${ENV_NAME}.yaml" ps || true
+    docker ps --filter "name=app-${ENV_NAME}" 2>/dev/null || true
     return 1
 }
 
@@ -120,6 +120,9 @@ rollback() {
     log "🔙 ======== 롤백 시작 ========"
     log "   안정 환경 [app-${STABLE}] 100% 복구 중..."
     apply_router_config "${STABLE}-100.yaml" "app-${STABLE} 100% 복구 (롤백)"
+    sleep 10  # 라우터가 변경 사항을 반영할 시간을 잠시 대기
+    log "📄 라우터에서 카나리 [app-${CANARY}] 제거 중..."
+    apply_router_config "${STABLE}-only.yaml" "app-${STABLE}만 라우터에 등록 (롤백 완료)"
     log "🛑 카나리 환경 [app-${CANARY}] 종료 중..."
     (cd "$BASE_DIR" && bash "$SCRIPT_DIR/down-${CANARY}.sh")
     log "✅ 롤백 완료. 안정 환경 [app-${STABLE}]이 트래픽 100%를 처리합니다."
@@ -153,7 +156,8 @@ if [ "$A_COUNT" -eq 0 ] && [ "$B_COUNT" -eq 0 ]; then
     (cd "$BASE_DIR" && bash "$SCRIPT_DIR/deploy-a.sh")
     (cd "$BASE_DIR" && bash "$SCRIPT_DIR/scale-a.sh" "$STABLE_REPLICAS")
     health_check "a" "$STABLE_REPLICAS"
-    apply_router_config "a-100.yaml" "app-a 100% 트래픽 (초기 배포)"
+    # 초기 배포는 app-b가 없으므로 -only 템플릿으로 라우터에 단독 등록
+    apply_router_config "a-only.yaml" "app-a 100% 트래픽 (초기 배포)"
     log ""
     log "================================================================"
     log "🎉 초기 배포 완료! 활성 환경: app-a | 이미지 태그: ${IMAGE_TAG}"
@@ -247,8 +251,10 @@ fi
 log ""
 
 # ============================================================
-# 구버전 컨테이너 종료
+# 구버전 컨테이너 종료 + 라우터에서 제거
 # ============================================================
+log "📄 라우터에서 구버전 [app-${STABLE}] 제거 중..."
+apply_router_config "${CANARY}-only.yaml" "app-${CANARY}만 라우터에 등록 (배포 완료)"
 log "🛑 구버전 [app-${STABLE}] 컨테이너 종료 중..."
 (cd "$BASE_DIR" && bash "$SCRIPT_DIR/down-${STABLE}.sh")
 log "✅ [app-${STABLE}] 종료 완료."

@@ -1,0 +1,15 @@
+http:
+  routers:
+    app-canary:
+      rule: PathPrefix(`/`)
+      entryPoints:
+        - web
+      service: app-canary
+
+  services:
+    app-canary:
+      weighted:
+        services:
+          - name: app-b@docker
+            weight: 100
+        healthCheck: {}
