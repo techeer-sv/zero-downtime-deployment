@@ -136,8 +136,8 @@ log "================================================================"
 log ""
 log "🔎 현재 실행 중인 환경 확인 중..."
 
-A_COUNT=$(cd "$BASE_DIR" && docker compose -f a.yaml ps --status running -q 2>/dev/null | wc -l | tr -d ' ')
-B_COUNT=$(cd "$BASE_DIR" && docker compose -f b.yaml ps --status running -q 2>/dev/null | wc -l | tr -d ' ')
+A_COUNT=$(docker ps --format "{{.Names}}" 2>/dev/null | (grep "app-a" || true) | wc -l | tr -d ' ')
+B_COUNT=$(docker ps --format "{{.Names}}" 2>/dev/null | (grep "app-b" || true) | wc -l | tr -d ' ')
 
 log "   app-a 실행 중인 컨테이너: ${A_COUNT}개"
 log "   app-b 실행 중인 컨테이너: ${B_COUNT}개"
