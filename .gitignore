@@ -33,3 +33,5 @@ go.work.sum
 
 plans/bluegreen/dynamic/bg-routers.yaml
 plans/bluegreen/dynamic/routers.yaml
+
+plans/canary/dynamic/canary-routers.yaml
