@@ -1,6 +1,7 @@
 #!/bin/bash
 
-PARALLEL=$1
+IMAGE_TAG=$1
+PARALLEL=$2
 
 echo "롤링 배포를 위해 새로운 버젼 replica + ${PARALLEL}"
 
