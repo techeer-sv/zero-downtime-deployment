@@ -1,0 +1,24 @@
+services:
+  app-rolling:
+    image: zero-downtime-app:${IMAGE_TAG}
+    networks:
+      - rolling-network
+    ports:
+      - "8080-8083:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    pull_policy: never
+    labels:
+      logging: enabled
+      traefik.enable: "true"
+      traefik.http.services.app-rolling.loadbalancer.server.port: "8080"
+      traefik.http.services.app-rolling.loadbalancer.healthcheck.path: "/health"
+      traefik.http.services.app-rolling.loadbalancer.healthcheck.interval: "10s"
+      traefik.http.services.app-rolling.loadbalancer.healthcheck.timeout: "3s"
+
+networks:
+  rolling-network:
+    external: true

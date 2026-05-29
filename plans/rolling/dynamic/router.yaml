@@ -1,0 +1,7 @@
+http:
+  routers:
+    app-canary:
+      rule: PathPrefix(`/`)
+      entryPoints:
+        - web
+      service: app-rolling@docker

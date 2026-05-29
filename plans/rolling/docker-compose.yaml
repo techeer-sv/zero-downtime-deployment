@@ -1,0 +1,51 @@
+services:
+  traefik:
+    image: traefik:v3.7.1
+    container_name: traefik_rolling
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--log.level=DEBUG"
+      - "--accesslog=true"
+      - "--accesslog.bufferingsize=100"
+      - "--accesslog.format=json"
+      - "--accesslog.fields.defaultmode=keep"
+      - "--accesslog.fields.headers.defaultmode=keep"
+      - "--accesslog.fields.headers.names.X-Forwarded-For=keep"
+      - "--api.insecure=true"
+      - "--api.dashboard=true"
+      - "--metrics.prometheus=true"
+      - "--metrics.prometheus.buckets=0.100000, 0.300000, 1.200000, 5.000000"
+      - "--metrics.prometheus.addEntryPointsLabels=true"
+      - "--metrics.prometheus.addServicesLabels=true"
+      - "--entryPoints.metrics.address=:8091"
+      - "--metrics.prometheus.entryPoint=metrics"
+      - "--tracing=true"
+      - "--tracing.otlp=true"
+      - "--tracing.otlp.grpc.insecure=true"
+      - "--tracing.otlp.grpc.endpoint=${MY_OTEL_HOST}:4317"
+      - "--tracing.serviceName=traefik_bg"
+      - "--tracing.sampleRate=1.0"
+      - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--providers.file.watch=true"
+    ports:
+      - "80:80"
+      - "8090:8080"
+      - "8091:8091"
+    environment:
+      MY_OTEL_HOST: ${MY_OTEL_HOST:-otel-collector}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./dynamic:/etc/traefik/dynamic:ro
+    networks:
+      - rolling-network
+    cpus: "0.5"
+    mem_limit: "500m"
+    labels:
+      logging: enabled
+
+networks:
+  rolling-network:
+    driver: bridge
+    name: rolling-network
