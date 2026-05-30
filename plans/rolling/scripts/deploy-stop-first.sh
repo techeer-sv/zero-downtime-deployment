@@ -35,7 +35,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(dirname "$SCRIPT_DIR")"
 
 HEALTH_TIMEOUT=60
-BAKE_TIME=20
+BAKE_TIME=60
 TOTAL_REPLICAS=3
 
 # ============================================================
