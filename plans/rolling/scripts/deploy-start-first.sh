@@ -27,7 +27,7 @@ fi
 
 export IMAGE_TAG="$1"
 
-log "🔄 롤링 배포 시작 (start-first) — 이미지 태그: ${IMAGE_TAG}"
+echo "🔄 롤링 배포 시작 (start-first) — 이미지 태그: ${IMAGE_TAG}"
 
 # ============================================================
 # 경로 설정
