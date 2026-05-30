@@ -40,9 +40,9 @@ export default function () {
   const res = http.get(targetUrl + '/');
   const body = res.body || '';
 
-  if (body.includes('version - 1.0.0')) {
+  if (body.includes('version - v1.0.0')) {
     blueResponses.add(1);
-  } else if (body.includes('version - 1.0.1')) {
+  } else if (body.includes('version - v1.0.1')) {
     greenResponses.add(1);
   } else {
     unknownResponses.add(1);

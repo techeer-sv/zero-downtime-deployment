@@ -7,7 +7,7 @@ services:
       K6_MAX_VUS: ${K6_MAX_VUS:-20}
       K6_DURATION: ${K6_DURATION:-10m}
       K6_RPS: ${K6_RPS:-20}
-      EXPECTED_VERSION: ${EXPECTED_VERSION:-}
+      EXPECTED_VERSION: ${EXPECTED_VERSION:-v1.0.1}
       K6_WEB_DASHBOARD: "true"
       K6_WEB_DASHBOARD_PORT: "5665"
     command: "run /scripts/bluegreen.js; tail -f /dev/null"
